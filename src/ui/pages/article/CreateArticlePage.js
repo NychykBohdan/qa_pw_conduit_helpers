@@ -10,6 +10,7 @@ export class CreateArticlePage {
       name: 'Publish Article',
     });
     this.errorMessage = page.getByRole('list').nth(1);
+    this.tagField = page.getByPlaceholder('Enter tags');
   }
 
   async fillTitleField(title) {
@@ -30,6 +31,20 @@ export class CreateArticlePage {
     });
   }
 
+  async fillTagField(tags) {
+    const tagArray = Array.isArray(tags) ? tags : [tags];
+    
+    if (!tagArray.length) return;
+
+    await test.step(`Fill Article tag field with 
+      ${tagArray.join(', ')}`, async () => {
+        for (const tag of tagArray) {
+          await this.tagField.fill(tag);
+          await this.page.keyboard.press('Enter');
+        }      
+    });
+  }
+
   async clickPublishArticleButton() {
     await test.step(`Click the 'Publish Article' button`, async () => {
       await this.publishArticleButton.click();
@@ -41,4 +56,5 @@ export class CreateArticlePage {
       await expect(this.errorMessage).toContainText(messageText);
     });
   }
+
 }
