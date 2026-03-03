@@ -46,9 +46,13 @@ test.describe('tests for editing article fields', () => {
 
   test('Edit article description', async ({ page }) => {
     await editPage.clickEditPageButton();
-    await editPage.fillDescriptionField('new description');
+    const newDescription = 'new description'
+
+    await editPage.fillDescriptionField(newDescription);
     await editPage.clickUpdateArticleButton();
     await waitAndReloadArticlePage(page);
+    await editPage.clickEditPageButton();
+    await editPage.assertDescriptionIsVisible(newDescription)
   })
   
   test('Edit article text', async({ page }) => {
@@ -114,6 +118,7 @@ test.describe('tests for editing tags in article with tags', () => {
     await editPage.fillTagField(newTags.tags);
     await editPage.clickUpdateArticleButton();
     await waitAndReloadArticlePage(page);
+    await viewArticlePage.assertArticleTagsAreVisible(article.tags);
     await viewArticlePage.assertArticleTagsAreVisible(newTags.tags);
   })
 })
@@ -148,21 +153,21 @@ test.describe('tests for removing data from article', () => {
     await viewArticlePage.assertArticleTagsAreHidden();
   })
   
-  test('remove article title', async({}) => {
+  test('remove article title', async({ page }) => {
     await editPage.clickEditPageButton();
     await editPage.removeTitleFromArticle();
     await editPage.clickUpdateArticleButton();
     await editPage.assertErrorMessageContainsText(TITLE_CANNOT_BE_EMPTY);
   })
   
-  test('remove article description', async({}) => {
+  test('remove article description', async({ page }) => {
     await editPage.clickEditPageButton();
     await editPage.removeDescriptionFromArticle();
     await editPage.clickUpdateArticleButton();
     await editPage.assertErrorMessageContainsText(DESCRIPTION_CANNOT_BE_EMPTY);
   })
   
-  test('remove article text', async({}) => {
+  test('remove article text', async({ page }) => {
     await editPage.clickEditPageButton();
     await editPage.removeTextFromArticle();
     await editPage.clickUpdateArticleButton();

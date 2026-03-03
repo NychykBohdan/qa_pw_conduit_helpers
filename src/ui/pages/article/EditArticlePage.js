@@ -49,7 +49,7 @@ export class EditArticlePage {
   }
 
   async clickUpdateArticleButton() {
-    await test.step(`Click the 'Publish Article' button`, async () => {
+    await test.step(`Click the 'Update Article' button`, async () => {
       await this.updateArticleButton.click();
     });
   }
@@ -60,11 +60,15 @@ export class EditArticlePage {
     });
   }
 
-  async removeTagsFromArticle(tagName) {
+  async removeTagsFromArticle(tags) {
     await test.step(`Remove tag from article`, async () => {
-      this.page.locator('span').filter({ 
-        hasText: tagName
-      }).locator('i').click();
+      for (const tag of tags) {
+        await this.page
+          .locator('span')
+          .filter({ hasText: tag})
+          .locator('i')
+          .click();
+      }
     })
   }
 
@@ -92,4 +96,10 @@ export class EditArticlePage {
     });
   }
 
+  async assertDescriptionIsVisible(description) {
+    await test.step(`Assert description ${description} is visible`, 
+      async () => {
+        await expect(this.descriptionField).toHaveValue(description);
+      })
+  }
 }

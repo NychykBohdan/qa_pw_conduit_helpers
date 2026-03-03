@@ -36,8 +36,8 @@ export class CreateArticlePage {
     
     if (!tagArray.length) return;
 
-    await test.step(`Fill Article tag field with 
-      ${tagArray.join(', ')}`, async () => {
+    await test.step(`Fill Article tag field with ${tagArray.join(', ')}`, 
+    async () => {
         for (const tag of tagArray) {
           await this.tagField.fill(tag);
           await this.page.keyboard.press('Enter');
